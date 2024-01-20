@@ -1,16 +1,30 @@
-import FriendModel, {Friend} from '../models/friendModel';
-import { Request, Response } from 'express';
+import FriendModel, { Friend } from "../models/friendModel";
+import { Request, Response } from "express";
+
+import UserModel from "../models/user";
+import mongoose from "mongoose";
 
 class FriendController {
   // GET: Get a list of user's friends
   async getFriends(req: Request, res: Response) {
     try {
       // Replace with logic to fetch the user's friends from the database
-      const userId: string = req.body.userId; // Assuming you have authentication middleware
-      const friends = await FriendModel.find({ $or: [{ userID1: userId }, { userID2: userId }] });
-      res.json(friends);
+      const userId: mongoose.Types.ObjectId = req.body.userId; // Assuming you have authentication middleware
+      const friends: Friend[] = await FriendModel.find({
+        $or: [{ userID1: userId }, { userID2: userId }],
+      });
+      const friendsIds: { _id: mongoose.Types.ObjectId }[] = [...friends].map(
+        (f: Friend) => {
+          return { _id: f.userID1 === userId ? f.userID2 : f.userID1 };
+        }
+      );
+      const friendsList = await UserModel.find({ $or: friendsIds}).select('username');
+     
+      res.json(friendsList);
     } catch (error) {
-      res.status(500).json({ error: 'An error occurred while fetching user\'s friends' });
+      res
+        .status(500)
+        .json({ error: "An error occurred while fetching user's friends" });
     }
   }
 
@@ -22,11 +36,13 @@ class FriendController {
       // Replace with logic to fetch the details of a specific friend by ID
       const friend = await FriendModel.findById(friendId);
       if (!friend) {
-        return res.status(404).json({ error: 'Friend not found' });
+        return res.status(404).json({ error: "Friend not found" });
       }
       res.json(friend);
     } catch (error) {
-      res.status(500).json({ error: 'An error occurred while fetching the friend' });
+      res
+        .status(500)
+        .json({ error: "An error occurred while fetching the friend" });
     }
   }
 
@@ -46,20 +62,22 @@ class FriendController {
       });
 
       if (existingRequest) {
-        return res.status(400).json({ error: 'Friend request already sent' });
+        return res.status(400).json({ error: "Friend request already sent" });
       }
 
       // Create a new friend request
       const friendRequest = new FriendModel({
         userID1: userId,
         userID2: friendId,
-        status: 'requested', // You can set the initial status
+        status: "requested", // You can set the initial status
       });
       await friendRequest.save();
-      
+
       res.status(201).json(friendRequest);
     } catch (error) {
-      res.status(500).json({ error: 'An error occurred while sending the friend request' });
+      res
+        .status(500)
+        .json({ error: "An error occurred while sending the friend request" });
     }
   }
 
@@ -73,26 +91,28 @@ class FriendController {
       const friendRequest = await FriendModel.findById(friendId);
 
       if (!friendRequest) {
-        return res.status(404).json({ error: 'Friend request not found' });
+        return res.status(404).json({ error: "Friend request not found" });
       }
 
       // Check if the user has the authority to accept/reject this request
       if (friendRequest.userID2.toString() !== req.body.userId) {
-        return res.status(403).json({ error: 'Unauthorized action' });
+        return res.status(403).json({ error: "Unauthorized action" });
       }
 
-      if (action === 'accept') {
-        friendRequest.status = 'accepted';
-      } else if (action === 'reject') {
-        friendRequest.status = 'rejected';
+      if (action === "accept") {
+        friendRequest.status = "accepted";
+      } else if (action === "reject") {
+        friendRequest.status = "rejected";
       } else {
-        return res.status(400).json({ error: 'Invalid action' });
+        return res.status(400).json({ error: "Invalid action" });
       }
 
       await friendRequest.save();
       res.json(friendRequest);
     } catch (error) {
-      res.status(500).json({ error: 'An error occurred while processing the request' });
+      res
+        .status(500)
+        .json({ error: "An error occurred while processing the request" });
     }
   }
 
@@ -102,14 +122,16 @@ class FriendController {
 
     try {
       // Replace with logic to remove a friend
-      const friend = await FriendModel.findByIdAndDelete({_id:friendId});
+      const friend = await FriendModel.findByIdAndDelete({ _id: friendId });
 
       if (!friend) {
-        return res.status(404).json({ error: 'Friend not found' });
+        return res.status(404).json({ error: "Friend not found" });
       }
-      res.json({ message: 'Friend removed successfully' });
+      res.json({ message: "Friend removed successfully" });
     } catch (error) {
-      res.status(500).json({ error: 'An error occurred while removing the friend' });
+      res
+        .status(500)
+        .json({ error: "An error occurred while removing the friend" });
     }
   }
 }
