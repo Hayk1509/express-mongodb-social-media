@@ -1,0 +1,206 @@
+{
+    "info": {
+      "_postman_id": "your-collection-id",
+      "name": "Your App API",
+      "description": "API endpoints for your app",
+      "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+      {
+        "name": "Users",
+        "item": [
+          {
+            "name": "Get All Users",
+            "request": {
+              "method": "GET",
+              "url": "{{base_url}}/api/users"
+            }
+          },
+          {
+            "name": "Get User by ID",
+            "request": {
+              "method": "GET",
+              "url": "{{base_url}}/api/users/{{user_id}}"
+            }
+          },
+          {
+            "name": "Create User",
+            "request": {
+              "method": "POST",
+              "url": "{{base_url}}/api/users",
+              "body": {
+                "mode": "raw",
+                "raw": "{\"username\":\"newuser\",\"password\":\"password\",\"email\":\"newuser@example.com\"}"
+              }
+            }
+          },
+          {
+            "name": "Update User by ID",
+            "request": {
+              "method": "PUT",
+              "url": "{{base_url}}/api/users/{{user_id}}",
+              "body": {
+                "mode": "raw",
+                "raw": "{\"username\":\"updateduser\"}"
+              }
+            }
+          },
+          {
+            "name": "Delete User by ID",
+            "request": {
+              "method": "DELETE",
+              "url": "{{base_url}}/api/users/{{user_id}}"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Friends",
+        "item": [
+          {
+            "name": "Get User's Friends",
+            "request": {
+              "method": "GET",
+              "url": "{{base_url}}/api/friends"
+            }
+          },
+          {
+            "name": "Get Friend by ID",
+            "request": {
+              "method": "GET",
+              "url": "{{base_url}}/api/friends/{{friend_id}}"
+            }
+          },
+          {
+            "name": "Send Friend Request",
+            "request": {
+              "method": "POST",
+              "url": "{{base_url}}/api/friends/{{friend_id}}/request"
+            }
+          },
+          {
+            "name": "Accept/Reject Friend Request",
+            "request": {
+              "method": "PUT",
+              "url": "{{base_url}}/api/friends/{{friend_id}}/request"
+            }
+          },
+          {
+            "name": "Remove Friend",
+            "request": {
+              "method": "DELETE",
+              "url": "{{base_url}}/api/friends/{{friend_id}}"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Posts",
+        "item": [
+          {
+            "name": "Get All Posts",
+            "request": {
+              "method": "GET",
+              "url": "{{base_url}}/api/posts"
+            }
+          },
+          {
+            "name": "Get Post by ID",
+            "request": {
+              "method": "GET",
+              "url": "{{base_url}}/api/posts/{{post_id}}"
+            }
+          },
+          {
+            "name": "Create Post",
+            "request": {
+              "method": "POST",
+              "url": "{{base_url}}/api/posts",
+              "body": {
+                "mode": "raw",
+                "raw": "{\"content\":\"New post content\"}"
+              }
+            }
+          },
+          {
+            "name": "Update Post by ID",
+            "request": {
+              "method": "PUT",
+              "url": "{{base_url}}/api/posts/{{post_id}}",
+              "body": {
+                "mode": "raw",
+                "raw": "{\"content\":\"Updated post content\"}"
+              }
+            }
+          },
+          {
+            "name": "Delete Post by ID",
+            "request": {
+              "method": "DELETE",
+              "url": "{{base_url}}/api/posts/{{post_id}}"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Images",
+        "item": [
+          {
+            "name": "Get All Images",
+            "request": {
+              "method": "GET",
+              "url": "{{base_url}}/api/images"
+            }
+          },
+          {
+            "name": "Get Image by ID",
+            "request": {
+              "method": "GET",
+              "url": "{{base_url}}/api/images/{{image_id}}"
+            }
+          },
+          {
+            "name": "Upload Image",
+            "request": {
+              "method": "POST",
+              "url": "{{base_url}}/api/images",
+              "body": {
+                "mode": "formdata",
+                "formdata": [
+                  {
+                    "key": "image",
+                    "type": "file",
+                    "src": "path/to/image.jpg"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "name": "Update Image by ID",
+            "request": {
+              "method": "PUT",
+              "url": "{{base_url}}/api/images/{{image_id}}",
+              "body": {
+                "mode": "formdata",
+                "formdata": [
+                  {
+                    "key": "description",
+                    "value": "Updated image description"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "name": "Delete Image by ID",
+            "request": {
+              "method": "DELETE",
+              "url": "{{base_url}}/api/images/{{image_id}}"
+            }
+          }
+        ]
+      }
+    ]
+  }
+  
